@@ -1,13 +1,10 @@
 import React from "react";
-import {Text, View} from "react-native";
+import Routes from "./Navigations/Routes";
 
 const App = props => {
   return(
-      <View>
-        <Text>Hello GSMyanmar</Text>
-      </View>
+     <Routes/>
   )
 }
-
 
 export default App
