@@ -16,6 +16,7 @@ import {Context} from "../../Navigations/Provider";
 import LottieView from 'lottie-react-native';
 import SkeletonListItemComponent from "../../Components/SkeletonListItemComponent";
 import SkeletonCategoryComponent from "../../Components/SkeletonCategoryComponent";
+import HelpBtnComponent from "../../Components/HelpBtnComponent";
 
 const GameScreen = props => {
     const {
@@ -87,6 +88,7 @@ const GameScreen = props => {
             ) : (
                 <View style={styles.container}>
                     <StatusBar backgroundColor={COLORS.white} barStyle={"dark-content"}/>
+                    <HelpBtnComponent/>
                     <HeaderBarComponent title="Games"/>
                     <View style={{padding: SIZES.padding}}>
                         <Text style={styles.categoryText}>Categories</Text>

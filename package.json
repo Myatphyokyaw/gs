@@ -10,6 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-firebase/analytics": "^14.9.4",
+    "@react-native-firebase/app": "^14.9.4",
+    "@react-native-firebase/in-app-messaging": "^14.9.4",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.10",
@@ -19,9 +22,12 @@
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-linear-gradient": "^2.5.6",
+    "react-native-push-notification": "^8.1.1",
+    "react-native-radio-buttons-group": "^2.2.10",
     "react-native-safe-area-context": "^4.2.5",
     "react-native-screens": "^3.13.1",
     "react-native-skeleton-placeholder": "^5.0.0",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-vector-icons": "^9.1.0"
   },
   "devDependencies": {

@@ -38,11 +38,11 @@ export const SIZES = {
 };
 
 export const FONTS = {
-    largeTitle: { fontFamily: "Inter-Bold", fontSize: SIZES.largeTitle, lineHeight: 55 },
-    h1: { fontFamily: "Inter-Bold", fontSize: SIZES.h1, lineHeight: 36 },
+    largeTitle: { fontFamily: "Inter-Bold", fontSize: SIZES.largeTitle},
+    h1: { fontFamily: "Inter-Bold", fontSize: SIZES.h1 },
     h2: { fontFamily: "Inter-Bold", fontSize: SIZES.h2 },
-    h3: { fontFamily: "Inter-Bold", fontSize: SIZES.h3, lineHeight: 22 },
-    h4: { fontFamily: "Inter-Bold", fontSize: SIZES.h4, lineHeight: 22 },
+    h3: { fontFamily: "Inter-Bold", fontSize: SIZES.h3 },
+    h4: { fontFamily: "Inter-Bold", fontSize: SIZES.h4 },
     body1: { fontFamily: "Inter-Medium", fontSize: SIZES.body1 },
     body2: { fontFamily: "Inter-Medium", fontSize: SIZES.body2 },
     body3: { fontFamily: "Inter-Medium", fontSize: SIZES.body3 },

@@ -1,0 +1,5 @@
+{
+  "react-native": {
+    "in_app_messaging_auto_collection_enabled": false
+  }
+}
