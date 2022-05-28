@@ -4,7 +4,7 @@ import GameScreen from "../ChildScreens/GameScreen";
 import {StyleSheet, Text, View} from "react-native";
 import AppScreen from "../ChildScreens/AppScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import {COLORS, FONTS} from "../../Themes/theme";
+import {COLORS, FONTS, SIZES} from "../../Themes/theme";
 import RequestScreen from "../ChildScreens/RequestScreen";
 import AdServiceScreen from "./AdServiceScreen";
 
@@ -16,7 +16,8 @@ const RootHomeScreen = props => {
             headerShown: false,
             tabBarShowLabel: false,
             tabBarStyle: styles.tabBar,
-            tabBarHideOnKeyboard: true
+            tabBarHideOnKeyboard: true,
+            tabBarItemStyle: styles.tabBarItem
         }}>
             <BottomTab.Screen options={{
                 tabBarIcon: ({focused}) => {
@@ -51,17 +52,6 @@ const RootHomeScreen = props => {
                     )
                 }
             }} name="RequestScreen" component={RequestScreen}/>
-            <BottomTab.Screen options={{
-                tabBarIcon: ({focused}) => {
-                    return (
-                        <View style={styles.tabBarBtnContainer}>
-                            <Ionicons color={focused ? COLORS.primary : COLORS.black}
-                                      name={focused ? "megaphone" : "megaphone-outline"} size={20}/>
-                            <Text style={{color: focused ? COLORS.primary : COLORS.black,...FONTS.body5}}>Ad Service</Text>
-                        </View>
-                    )
-                }
-            }} name="AdServiceScreen" component={AdServiceScreen}/>
         </BottomTab.Navigator>
     )
 }
@@ -69,10 +59,18 @@ const RootHomeScreen = props => {
 const styles = StyleSheet.create({
     tabBar: {
         height: '7%',
+        position:"absolute",
+        marginHorizontal:SIZES.padding * 3,
+        borderRadius:SIZES.roundRadius,
+        bottom:'2%',
+        backgroundColor:"rgba(255,255,255,0.96)"
     },
     tabBarBtnContainer: {
         justifyContent: "center",
         alignItems: "center"
+    },
+    tabBarItem:{
+
     }
 })
 

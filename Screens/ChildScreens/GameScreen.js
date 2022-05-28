@@ -16,7 +16,7 @@ import {Context} from "../../Navigations/Provider";
 import LottieView from 'lottie-react-native';
 import SkeletonListItemComponent from "../../Components/SkeletonListItemComponent";
 import SkeletonCategoryComponent from "../../Components/SkeletonCategoryComponent";
-import HelpBtnComponent from "../../Components/HelpBtnComponent";
+import NetWorkErrorModalComponent from "../../Components/NetWorkErrorModalComponent";
 
 const GameScreen = props => {
     const {
@@ -29,18 +29,24 @@ const GameScreen = props => {
         setPage,
         page,
         more,
-        setMore
+        getPageData,
+        getFilterByCategory,
+        getPageFilterByCategory
     } = useContext(Context);
     const [selected, setSelected] = useState(null);
     const [all, setAll] = useState(true)
+    const [categoryRole, setCategoryRole] = useState(false)
+    const [categoryId, setCategoryId] = useState(null)
     useEffect(() => {
         getAllData()
-    }, [page])
+    }, [])
 
     const selectCategory = (id, selectID) => {
         setSelected(id)
         setAll(false)
-        getFilterData(selectID)
+        getFilterByCategory(selectID)
+        setCategoryRole(true)
+        setCategoryId(selectID)
     }
 
     const selectAll = async () => {
@@ -48,19 +54,30 @@ const GameScreen = props => {
         await setSelected(null)
         await setPage(1)
         await getAllData()
+        await setCategoryRole(false)
     }
-
     const loadMore = async () => {
         if (more) {
-            setPage(page + 1)
+            if (categoryRole) {
+                await setPage(page + 1)
+                console.log(categoryId)
+                getPageFilterByCategory(categoryId)
+            } else {
+                await setPage(page + 1)
+                getPageData()
+            }
         } else {
-
+            console.log("No More")
         }
-        console.log(page)
+    }
+
+    const goDetail = (item) => {
+        props.navigation.navigate("GamesDetailScreen", item)
     }
 
     return (
         <>
+            <NetWorkErrorModalComponent/>
             {loading ? (
                 <View style={styles.loadingContainer}>
                     <StatusBar barStyle={'dark-content'} backgroundColor={COLORS.white}/>
@@ -88,7 +105,6 @@ const GameScreen = props => {
             ) : (
                 <View style={styles.container}>
                     <StatusBar backgroundColor={COLORS.white} barStyle={"dark-content"}/>
-                    <HelpBtnComponent/>
                     <HeaderBarComponent title="Games"/>
                     <View style={{padding: SIZES.padding}}>
                         <Text style={styles.categoryText}>Categories</Text>
@@ -127,29 +143,41 @@ const GameScreen = props => {
                                 </View>
                             ) : (
                                 <FlatList data={data} keyExtractor={(item, index) => index.toString()}
+                                          showsVerticalScrollIndicator={false}
                                           onEndReachedThreshold={0.5}
                                           onEndReached={loadMore}
                                           ListFooterComponent={more ? (
-                                              <ActivityIndicator style={{marginBottom: 20, marginTop: 5}}
-                                                                 color={COLORS.primary} size={30}/>) : null}
+                                                  <ActivityIndicator style={{marginBottom: 20, marginTop: 5}}
+                                                                     color={COLORS.primary} size={30}/>) :
+                                              <View style={{marginBottom: 20, marginTop: 5, alignItems: "center"}}>
+                                                  <Text>No More Data.</Text>
+                                              </View>
+                                          }
                                           renderItem={({item, index}) => {
                                               return (
-                                                  <TouchableOpacity activeOpacity={.3} style={styles.gameListContainer}>
+                                                  <TouchableOpacity onPress={() => goDetail(item)} activeOpacity={.3}
+                                                                    style={styles.gameListContainer}>
                                                       <View style={styles.listItem}>
                                                           <Image
                                                               style={styles.logoImage}
-                                                              source={{uri: "http://192.168.1.52/ahc_Project/frame-master/frame-master/project/public/storage/thumbnail/" + item.logo}}/>
+                                                              source={{uri: item.logo}}/>
                                                           <View style={styles.rightContainer}>
-                                                              <Text style={styles.gameName}>{item.name}</Text>
+                                                              <Text style={styles.gameName}>{((item.name).length > 37) ?
+                                                                  (((item.name).substring(0, 35 - 3)) + '...') :
+                                                                  item.name}</Text>
                                                               <Text style={styles.gameVersion}>v{item.version} ,
-                                                                  size {item.size}</Text>
+                                                                  size {((item.size).length > 20) ?
+                                                                      (((item.size).substring(0, 20 - 3)) + '...') :
+                                                                      item.size}</Text>
                                                               <View style={styles.badgeContainer}>
                                                                   <View style={styles.categoryBadge}>
-                                                                      <Text
-                                                                          style={styles.categoryName}>{item.category_title}</Text>
+                                                                      <Text style={styles.categoryName}>{item.get_category.title}</Text>
                                                                   </View>
-                                                                  <View style={styles.statusBadge}>
-                                                                      <Text style={styles.categoryName}>Offline</Text>
+                                                                  <View
+                                                                      style={(item.type.toLowerCase().trim().split('')[1] === 'f') ? styles.offlineBadge : styles.onlineBadge}>
+                                                                      <Text style={styles.categoryName}>{
+                                                                          (item.type.toLowerCase().trim().split('')[1] === 'f') ? "Offline" : "Online"
+                                                                      }</Text>
                                                                   </View>
                                                               </View>
                                                           </View>
@@ -170,7 +198,7 @@ const GameScreen = props => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.white,
     },
     categoryText: {
         ...FONTS.h4,
@@ -213,7 +241,7 @@ const styles = StyleSheet.create({
     rightContainer: {
         paddingHorizontal: SIZES.padding,
         paddingVertical: SIZES.padding - 5,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     gameName: {
         ...FONTS.body4,
@@ -221,16 +249,17 @@ const styles = StyleSheet.create({
     },
     gameVersion: {
         ...FONTS.body5,
-        color: COLORS.secondary
+        color: COLORS.secondary,
+        marginBottom: 3,
     },
     categoryBadge: {
-        width: 70,
         height: 18,
         borderRadius: SIZES.roundRadius,
-        backgroundColor: COLORS.primary,
+        backgroundColor: COLORS.yellow,
+        paddingHorizontal:SIZES.padding * 1.4,
         justifyContent: "center",
         alignItems: "center",
-        marginEnd: SIZES.padding
+        marginEnd: SIZES.padding,
     },
     categoryName: {
         color: COLORS.white,
@@ -239,11 +268,19 @@ const styles = StyleSheet.create({
     badgeContainer: {
         flexDirection: "row"
     },
-    statusBadge: {
+    offlineBadge: {
         width: 70,
         height: 18,
         borderRadius: SIZES.roundRadius,
-        backgroundColor: COLORS.secondary,
+        backgroundColor: COLORS.darkgray,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    onlineBadge: {
+        width: 70,
+        height: 18,
+        borderRadius: SIZES.roundRadius,
+        backgroundColor: COLORS.success,
         justifyContent: "center",
         alignItems: "center",
     }

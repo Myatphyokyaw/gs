@@ -28,7 +28,9 @@
     "react-native-screens": "^3.13.1",
     "react-native-skeleton-placeholder": "^5.0.0",
     "react-native-splash-screen": "^3.3.0",
-    "react-native-vector-icons": "^9.1.0"
+    "react-native-vector-icons": "^9.1.0",
+    "react-native-webview": "^11.18.2",
+    "react-native-youtube-iframe": "^2.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

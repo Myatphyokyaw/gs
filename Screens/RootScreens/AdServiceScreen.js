@@ -11,12 +11,9 @@ const AdServiceScreen = props => {
             <AdServiceHeaderComponent title="Ads Service"/>
             <HelpBtnComponent/>
             <View style={styles.subContainer}>
-                <TouchableOpacity style={styles.firstContainer}>
+                <View style={styles.adListContainer}>
 
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.firstContainer}>
-
-                </TouchableOpacity>
+                </View>
                 <View style={styles.lottieContainer}>
                     <LottieView autoPlay loop style={styles.adsLottie}
                                 source={require("../../Graphics/Lotties/ads.json")}/>
@@ -34,8 +31,7 @@ const styles = StyleSheet.create({
     subContainer: {
         flex: 1,
         width: '100%',
-        paddingHorizontal: SIZES.padding,
-        paddingVertical: SIZES.padding * 3
+        paddingHorizontal: SIZES.padding
     },
     firstContainer: {
         height: SIZES.height / 7,
@@ -52,7 +48,7 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     lottieContainer: {
-        flex: 1,
+        flex: 0.5,
         justifyContent: "center",
         alignItems: "center"
     },
@@ -60,6 +56,9 @@ const styles = StyleSheet.create({
         width: 200,
         height: SIZES.height / 3,
         alignItems: "center",
+    },
+    adListContainer:{
+        flex:0.5,
     }
 })
 
