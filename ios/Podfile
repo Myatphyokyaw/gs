@@ -21,6 +21,8 @@ target 'gs' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+  pod 'react-native-version-check', :path => '../node_modules/react-native-version-check'
+
   target 'gsTests' do
     inherit! :complete
     # Pods for testing

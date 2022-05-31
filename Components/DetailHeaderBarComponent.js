@@ -1,5 +1,5 @@
 import React from "react";
-import {View, StyleSheet, TouchableOpacity, Text} from "react-native";
+import {View, StyleSheet, TouchableOpacity, Text, Pressable} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {COLORS, FONTS, SIZES} from "../Themes/theme";
 import {useNavigation} from "@react-navigation/native";
@@ -9,9 +9,9 @@ const DetailHeaderBarComponent = props => {
     return (
         <View style={styles.container}>
             <View style={{flex: 0.5}}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Pressable style={{width:30}} android_ripple={{color:COLORS.darkgray,borderless:true}} onPress={() => navigation.goBack()}>
                     <Ionicons name="chevron-back-outline" color={COLORS.black} size={30}/>
-                </TouchableOpacity>
+                </Pressable>
             </View>
             <View>
                 <Text style={styles.headerText}>Detail</Text>

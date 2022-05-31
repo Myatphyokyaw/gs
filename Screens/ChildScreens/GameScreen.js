@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Image,
     ActivityIndicator,
-    FlatList
+    FlatList, Pressable
 } from "react-native";
 import {COLORS, FONTS, SIZES} from "../../Themes/theme";
 import HeaderBarComponent from "../../Components/HeaderBarComponent";
@@ -155,8 +155,9 @@ const GameScreen = props => {
                                           }
                                           renderItem={({item, index}) => {
                                               return (
-                                                  <TouchableOpacity onPress={() => goDetail(item)} activeOpacity={.3}
-                                                                    style={styles.gameListContainer}>
+                                                  <Pressable android_ripple={{color: COLORS.darkgray}}
+                                                             onPress={() => goDetail(item)} activeOpacity={.3}
+                                                             style={styles.gameListContainer}>
                                                       <View style={styles.listItem}>
                                                           <Image
                                                               style={styles.logoImage}
@@ -171,7 +172,8 @@ const GameScreen = props => {
                                                                       item.size}</Text>
                                                               <View style={styles.badgeContainer}>
                                                                   <View style={styles.categoryBadge}>
-                                                                      <Text style={styles.categoryName}>{item.get_category.title}</Text>
+                                                                      <Text
+                                                                          style={styles.categoryName}>{item.get_category.title}</Text>
                                                                   </View>
                                                                   <View
                                                                       style={(item.type.toLowerCase().trim().split('')[1] === 'f') ? styles.offlineBadge : styles.onlineBadge}>
@@ -182,7 +184,7 @@ const GameScreen = props => {
                                                               </View>
                                                           </View>
                                                       </View>
-                                                  </TouchableOpacity>
+                                                  </Pressable>
                                               )
                                           }}/>
                             )
@@ -236,7 +238,7 @@ const styles = StyleSheet.create({
     logoImage: {
         width: 80,
         height: 80,
-        borderRadius: SIZES.radius * 3
+        borderRadius: SIZES.radius
     },
     rightContainer: {
         paddingHorizontal: SIZES.padding,
@@ -256,7 +258,7 @@ const styles = StyleSheet.create({
         height: 18,
         borderRadius: SIZES.roundRadius,
         backgroundColor: COLORS.yellow,
-        paddingHorizontal:SIZES.padding * 1.4,
+        paddingHorizontal: SIZES.padding * 1.4,
         justifyContent: "center",
         alignItems: "center",
         marginEnd: SIZES.padding,

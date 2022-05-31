@@ -1,5 +1,5 @@
 import React from "react";
-import {View, StyleSheet, TouchableOpacity, Text, Linking} from "react-native";
+import {View, StyleSheet, Pressable, Text, Linking} from "react-native";
 import DetailSectionCard from "./DetailSectionCard";
 import {COLORS, FONTS, SIZES} from "../Themes/theme";
 import NotAvaiableBtnComponent from "./NotAvaiableBtnComponent";
@@ -9,14 +9,13 @@ const DownloadBtnSecContainer = props => {
     const openUrl = async (url) => {
         await Linking.openURL(url)
     }
-
     return (
         <DetailSectionCard>
             {
                 props.link1 ? (
-                    <TouchableOpacity onPress={() => openUrl(props.link1)} style={styles.downloadApkBtn}>
+                    <Pressable android_ripple={{color:COLORS.lightGray}} onPress={() => openUrl(props.link1)} style={styles.downloadApkBtn}>
                         <Text style={styles.btnText}>Download APK</Text>
-                    </TouchableOpacity>
+                    </Pressable>
                 ) : (
                     <NotAvaiableBtnComponent width="100%" title="APK"/>
                 )
@@ -24,18 +23,18 @@ const DownloadBtnSecContainer = props => {
             <View style={styles.downloadOtherBtnContainer}>
                 {
                     props.link2 ? (
-                        <TouchableOpacity onPress={() => openUrl(props.link2)} style={styles.downloadModBtn}>
+                        <Pressable android_ripple={{color:COLORS.lightGray}} onPress={() => openUrl(props.link2)} style={styles.downloadModBtn}>
                             <Text style={styles.btnText}>Download MOD</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     ) : (
                         <NotAvaiableBtnComponent width="48%" title="Mod"/>
                     )
                 }
                 {
                     props.link3 ? (
-                        <TouchableOpacity onPress={() => openUrl(props.link3)} style={styles.downloadOtherBtn}>
+                        <Pressable android_ripple={{color:COLORS.lightGray}} onPress={() => openUrl(props.link3)} style={styles.downloadOtherBtn}>
                             <Text style={styles.btnText}>Download Other</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     ) : (
                         <NotAvaiableBtnComponent width="48%" title="Other"/>
                     )
@@ -51,13 +50,13 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: SIZES.roundRadius
+        borderRadius: SIZES.radius
     },
     downloadModBtn: {
         width: '48%',
         height: 40,
         backgroundColor: COLORS.yellow,
-        borderRadius: SIZES.roundRadius,
+        borderRadius: SIZES.radius,
         justifyContent: "center",
         alignItems: "center"
     },
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
         width: '48%',
         height: 40,
         backgroundColor: COLORS.secondary,
-        borderRadius: SIZES.roundRadius,
+        borderRadius: SIZES.radius,
         justifyContent: "center",
         alignItems: "center"
     },

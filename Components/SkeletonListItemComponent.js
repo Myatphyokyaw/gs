@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     logoImage:{
         width: 80,
         height: 80,
-        borderRadius: SIZES.radius * 3
+        borderRadius: SIZES.radius
     },
     rightContainer: {
         paddingHorizontal: SIZES.padding,

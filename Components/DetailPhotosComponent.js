@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {View, StyleSheet, Text, Image, FlatList, TouchableOpacity, ScrollView} from "react-native";
+import {View, StyleSheet, Text, Image, FlatList, TouchableOpacity, ScrollView, Pressable} from "react-native";
 import DetailSectionCard from "./DetailSectionCard";
 import {COLORS, FONTS, SIZES} from "../Themes/theme";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
@@ -7,18 +7,18 @@ import {Context} from "../Navigations/Provider";
 
 const DetailPhotosComponent = props => {
     const [loading, setLoading] = useState(true);
-    const {modalVisible, setModalVisible, setImgUrl,setFullImgList,setIndex} = useContext(Context)
+    const {modalVisible, setModalVisible, setImgUrl, setFullImgList, setIndex} = useContext(Context)
 
-    const tabImage = (url,index) => {
+    const tabImage = (url, index) => {
         setModalVisible(true)
         setImgUrl(url)
         setFullImgList(props.fullImg)
         setIndex(index)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(props.demoImg)
-    },[])
+    }, [])
 
     return (
         <DetailSectionCard>
@@ -33,7 +33,7 @@ const DetailPhotosComponent = props => {
                                       </SkeletonPlaceholder>
                                   )}
                                   <TouchableOpacity style={styles.imageContainer}
-                                                    onPress={() => tabImage(props.fullImg[index],index)}
+                                                    onPress={() => tabImage(props.fullImg[index], index)}
                                                     activeOpacity={.7}>
                                       <Image onLoadEnd={() => setLoading(false)}
                                              style={loading ? styles.emptyImg : styles.image}

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         alignItems:"center",
         flexDirection:"row",
         backgroundColor:COLORS.lightGray2,
-        borderRadius:SIZES.roundRadius,
+        borderRadius:SIZES.radius,
     }
 })
 

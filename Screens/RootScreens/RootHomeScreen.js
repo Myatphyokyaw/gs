@@ -7,6 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import {COLORS, FONTS, SIZES} from "../../Themes/theme";
 import RequestScreen from "../ChildScreens/RequestScreen";
 import AdServiceScreen from "./AdServiceScreen";
+import NotificationScreen from "./NotificationScreen";
 
 const BottomTab = createBottomTabNavigator()
 
@@ -52,6 +53,17 @@ const RootHomeScreen = props => {
                     )
                 }
             }} name="RequestScreen" component={RequestScreen}/>
+            {/*<BottomTab.Screen options={{*/}
+            {/*    tabBarIcon: ({focused}) => {*/}
+            {/*        return (*/}
+            {/*            <View style={styles.tabBarBtnContainer}>*/}
+            {/*                <Ionicons color={focused ? COLORS.primary : COLORS.black}*/}
+            {/*                          name={focused ? "notifications" : "notifications-outline"} size={20}/>*/}
+            {/*                <Text style={{color: focused ? COLORS.primary : COLORS.black,...FONTS.body5}}>Notification</Text>*/}
+            {/*            </View>*/}
+            {/*        )*/}
+            {/*    }*/}
+            {/*}} name="NotificationScreen" component={NotificationScreen}/>*/}
         </BottomTab.Navigator>
     )
 }

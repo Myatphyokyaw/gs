@@ -7,7 +7,7 @@ import LottieView from "lottie-react-native";
 const NetWorkErrorModalComponent = props => {
     const {networkModal,setNetWorkModal} = useContext(Context)
     return (
-        <Modal transparent={true} animated={true}  visible={networkModal}>
+        <Modal transparent={true} animated={true}  visible={false}>
           <StatusBar backgroundColor="rgba(0,0,0,0.57)"/>
           <View style={styles.container}>
               <View style={styles.subContainer}>
@@ -20,7 +20,6 @@ const NetWorkErrorModalComponent = props => {
                           <Text style={styles.btnText}>Ok I will check</Text>
                       </TouchableOpacity>
                   </View>
-
               </View>
           </View>
         </Modal>

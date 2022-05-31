@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     logo: {
         width: 80,
         height: 80,
-        borderRadius: SIZES.radius * 2
+        borderRadius: SIZES.radius
     },
     name: {
         ...FONTS.h5,
