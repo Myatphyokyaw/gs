@@ -2,8 +2,44 @@ import React, {createContext, useEffect, useState} from "react";
 import axios from "axios";
 
 export const Context = createContext();
+import {openDatabase} from "react-native-sqlite-storage"
 
+const db = openDatabase(
+    {
+        name: "MainDB",
+        location: "default"
+    },
+    () => {
+
+    },
+    error => {
+        console.log(error)
+    }
+)
 export const Provider = ({children}) => {
+
+    useEffect(() => {
+        createTable()
+        console.log("hello")
+    }, [])
+
+    const createTable = () => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `CREATE TABLE IF NOT EXISTS `
+                + "NOTIFICATION"
+                + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, TITLE TEXT, DESC TEXT,TIME TEXT)",
+                [],
+                (sqlTX, res) => {
+                    console.log("Table created successfully")
+                },
+                error => {
+                    console.log("error creating on table" + error.message)
+                }
+            )
+        })
+    }
+
     const [category, setCategory] = useState([]);
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true);
@@ -16,6 +52,11 @@ export const Provider = ({children}) => {
     const [index, setIndex] = useState(null)
     const [networkModal, setNetWorkModal] = useState(false)
     const [requestGameData, setRequestGameData] = useState(null)
+    const [adsOneData, setAdsOneData] = useState([])
+    const [adsTwoData, setAdsTwoData] = useState([])
+    const [notificationData, setNotificationData] = useState([])
+    const [notiLoad, setNotiLoad] = useState(true)
+    const [emptyNoti,setEmptyNoti] = useState(false)
     const arr = []
     return (
         <Context.Provider value={{
@@ -41,13 +82,22 @@ export const Provider = ({children}) => {
             setNetWorkModal,
             requestGameData,
             setRequestGameData,
+            adsOneData,
+            setAdsOneData,
+            adsTwoData,
+            setAdsTwoData,
+            notiLoad,
+            setNotiLoad,
+            notificationData,
+            emptyNoti,
+            setEmptyNoti,
             getAllData: async () => {
                 setLoading(true)
                 setMore(true)
                 setPage(2)
                 let config = {
                     method: 'get',
-                    url: `http://192.168.1.28/project/public/api/v1/game`,
+                    url: `http://game.mgbogyi.com/api/v1/game`,
                     headers: {"x-hardik": "123456"},
                 };
                 axios(config)
@@ -63,6 +113,7 @@ export const Provider = ({children}) => {
                     })
                     .catch(function (error) {
                         console.log(error.message);
+                        console.log("1")
                         if (error.message === "Network Error") {
                             setNetWorkModal(true)
                         }
@@ -72,7 +123,7 @@ export const Provider = ({children}) => {
                 setLoading(false)
                 let config = {
                     method: 'get',
-                    url: `http://192.168.1.28/project/public/api/v1/game?page=${page}`,
+                    url: `http://game.mgbogyi.com/api/v1/game?page=${page}`,
                     headers: {"x-hardik": "123456"},
                 };
                 console.log(page)
@@ -88,6 +139,7 @@ export const Provider = ({children}) => {
                     })
                     .catch(function (error) {
                         console.log(error.message);
+                        console.log("2")
                         if (error.message === "Network Error") {
                             setNetWorkModal(true)
                         }
@@ -99,7 +151,7 @@ export const Provider = ({children}) => {
                 setPage(2)
                 let config = {
                     method: 'get',
-                    url: `http://192.168.1.28/project/public/api/v1/game/${categoryID}`,
+                    url: `http://game.mgbogyi.com/api/v1/game/${categoryID}`,
                     headers: {"x-hardik": "123456"},
                 };
                 axios(config)
@@ -110,6 +162,8 @@ export const Provider = ({children}) => {
                     })
                     .catch(function (error) {
                         console.log(error.message);
+                        console.log("3")
+
                         if (error.message === "Network Error") {
                             setNetWorkModal(true)
                         }
@@ -120,7 +174,7 @@ export const Provider = ({children}) => {
                 setCategoryLoad(false)
                 let config = {
                     method: 'get',
-                    url: `http://192.168.1.28/project/public/api/v1/game/${categoryID}?page=${page}`,
+                    url: `http://game.mgbogyi.com/api/v1/game/${categoryID}?page=${page}`,
                     headers: {"x-hardik": "123456"},
                 };
                 axios(config)
@@ -141,12 +195,84 @@ export const Provider = ({children}) => {
                     })
                     .catch(function (error) {
                         console.log(error.message);
+                        console.log("4")
+
                         if (error.message === "Network Error") {
                             setNetWorkModal(true)
                         }
                     });
             },
+            getAds: async () => {
+                let config = {
+                    method: 'get',
+                    url: 'http://game.mgbogyi.com/api/v1/ads',
+                    headers: {'x-hardik': '123456'}
+                };
+                axios(config)
+                    .then(async function (response) {
+                        let data = response.data
+                        await setAdsOneData(data.filter(el => el.type === "1"))
+                        await setAdsTwoData(data.filter(el => el.type === "2"))
+                        console.log(adsTwoData)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        console.log("5")
+                    });
+            },
+            setNoti: async (title, desc, time) => {
+                if (title, desc, time) {
+                    try {
+                        await db.transaction(async (tx) => {
+                            tx.executeSql(
+                                `INSERT INTO NOTIFICATION (TITLE,DESC,TIME) VALUES (?,?,?)`,
+                                [title, desc, time],
+                                (tx, res) => {
+                                    console.log("Insert successfully")
+                                },
+                                error => {
+                                    console.log("Error setting noti" + error.message)
+                                }
+                            )
+                        })
+                    } catch (e) {
+                        console.log(e)
+                    }
+                } else {
+                    console.log("Something went wrong")
+                }
 
+            },
+            getNoti: async () => {
+                try {
+                    setNotiLoad(true)
+                    setEmptyNoti(false)
+                    db.transaction((tx) => {
+                        tx.executeSql(
+                            `SELECT * FROM NOTIFICATION ORDER BY id DESC`,
+                            [],
+                            async (tx, results) => {
+                                let len = results.rows.length;
+                                if (len > 0) {
+                                    let result = [];
+                                    for (let i = 0; i < len; i++) {
+                                        let item = results.rows.item(i)
+                                        result.push({title: item.TITLE, desc: item.DESC, time: item.TIME})
+                                    }
+                                    await setNotificationData(result)
+                                    await setNotiLoad(false)
+                                }else{
+                                    setNotiLoad(false)
+                                    await setEmptyNoti(true)
+                                }
+                            },
+                            error => console.log("Error on getNoti", error.message)
+                        )
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
+            }
         }}>
             {children}
         </Context.Provider>

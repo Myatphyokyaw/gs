@@ -4,8 +4,6 @@ import RootHomeScreen from "../Screens/RootScreens/RootHomeScreen";
 import AboutScreen from "../Screens/RootScreens/AboutScreen";
 import GamesDetailScreen from "../Screens/RootScreens/GamesDetailScreen";
 import SearchScreen from "../Screens/RootScreens/SearchScreen";
-import NetWorkErrorModalComponent from "../Components/NetWorkErrorModalComponent";
-
 const Stack = createNativeStackNavigator()
 
 const AppStack = props => {
@@ -21,7 +19,7 @@ const AppStack = props => {
                     animation: "slide_from_bottom"
                 }}  name="GamesDetailScreen"  component={GamesDetailScreen}/>
                 <Stack.Screen options={{
-                    animation: "fade_from_bottom"
+                    animation: "fade"
                 }}  name="SearchScreen"  component={SearchScreen}/>
             </Stack.Navigator>
     )

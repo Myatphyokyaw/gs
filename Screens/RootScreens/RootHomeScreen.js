@@ -6,7 +6,6 @@ import AppScreen from "../ChildScreens/AppScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {COLORS, FONTS, SIZES} from "../../Themes/theme";
 import RequestScreen from "../ChildScreens/RequestScreen";
-import AdServiceScreen from "./AdServiceScreen";
 import NotificationScreen from "./NotificationScreen";
 
 const BottomTab = createBottomTabNavigator()
@@ -23,10 +22,15 @@ const RootHomeScreen = props => {
             <BottomTab.Screen options={{
                 tabBarIcon: ({focused}) => {
                     return (
-                        <View style={styles.tabBarBtnContainer}>
-                            <Ionicons color={focused ? COLORS.primary : COLORS.black}
-                                      name={focused ? "game-controller" : "game-controller-outline"} size={20}/>
-                            <Text style={{color: focused ? COLORS.primary : COLORS.black,...FONTS.body5}}>Games</Text>
+                        <View style={[styles.tabBarBtnContainer,{backgroundColor:focused ? COLORS.primaryTransparent : COLORS.transparent}]}>
+                            <Ionicons color={COLORS.primary}
+                                      name={"game-controller-outline"} size={20}/>
+                            {
+                                focused ? (
+                                    <Text
+                                        style={styles.text}>Games</Text>
+                                ) : null
+                            }
                         </View>
                     )
                 }
@@ -34,10 +38,15 @@ const RootHomeScreen = props => {
             <BottomTab.Screen options={{
                 tabBarIcon: ({focused}) => {
                     return (
-                        <View style={styles.tabBarBtnContainer}>
-                            <Ionicons color={focused ? COLORS.primary : COLORS.black}
-                                      name={focused ? "server" : "server-outline"} size={20}/>
-                            <Text style={{color: focused ? COLORS.primary : COLORS.black,...FONTS.body5}}>Apps</Text>
+                        <View style={[styles.tabBarBtnContainer,{backgroundColor:focused ? COLORS.primaryTransparent : COLORS.transparent}]}>
+                            <Ionicons color={COLORS.primary}
+                                      name={"md-cube-outline"} size={20}/>
+                            {
+                                focused ? (
+                                    <Text
+                                        style={styles.text}>Apps</Text>
+                                ) : null
+                            }
                         </View>
                     )
                 }
@@ -45,44 +54,54 @@ const RootHomeScreen = props => {
             <BottomTab.Screen options={{
                 tabBarIcon: ({focused}) => {
                     return (
-                        <View style={styles.tabBarBtnContainer}>
-                            <Ionicons color={focused ? COLORS.primary : COLORS.black}
-                                      name={focused ? "paper-plane" : "paper-plane-outline"} size={20}/>
-                            <Text style={{color: focused ? COLORS.primary : COLORS.black,...FONTS.body5}}>Request</Text>
+                        <View style={[styles.tabBarBtnContainer,{backgroundColor:focused ? COLORS.primaryTransparent : COLORS.transparent}]}>
+                            <Ionicons color={COLORS.primary}
+                                      name={"paper-plane-outline"} size={20}/>
+                            {
+                                focused ? (
+                                    <Text
+                                        style={styles.text}>Request</Text>
+                                ) : null
+                            }
                         </View>
                     )
                 }
             }} name="RequestScreen" component={RequestScreen}/>
-            {/*<BottomTab.Screen options={{*/}
-            {/*    tabBarIcon: ({focused}) => {*/}
-            {/*        return (*/}
-            {/*            <View style={styles.tabBarBtnContainer}>*/}
-            {/*                <Ionicons color={focused ? COLORS.primary : COLORS.black}*/}
-            {/*                          name={focused ? "notifications" : "notifications-outline"} size={20}/>*/}
-            {/*                <Text style={{color: focused ? COLORS.primary : COLORS.black,...FONTS.body5}}>Notification</Text>*/}
-            {/*            </View>*/}
-            {/*        )*/}
-            {/*    }*/}
-            {/*}} name="NotificationScreen" component={NotificationScreen}/>*/}
+            <BottomTab.Screen options={{
+                tabBarIcon: ({focused}) => {
+                    return (
+                        <View style={[styles.tabBarBtnContainer,{backgroundColor:focused ? COLORS.primaryTransparent : COLORS.transparent}]}>
+                            <Ionicons color={COLORS.primary}
+                                      name={"notifications-outline"} size={20}/>
+                            {
+                                focused ? (
+                                    <Text
+                                        style={styles.text}>Noti</Text>
+                                ) : null
+                            }
+                        </View>
+                    )
+                }
+            }} name="NotificationScreen" component={NotificationScreen}/>
         </BottomTab.Navigator>
     )
 }
 
 const styles = StyleSheet.create({
     tabBar: {
-        height: '7%',
-        position:"absolute",
-        marginHorizontal:SIZES.padding * 3,
-        borderRadius:SIZES.roundRadius,
-        bottom:'2%',
-        backgroundColor:"rgba(255,255,255,0.96)"
     },
     tabBarBtnContainer: {
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        flexDirection:"row",
+        paddingVertical:SIZES.padding - 4,
+        paddingHorizontal:SIZES.padding,
+        borderRadius:SIZES.roundRadius,
     },
-    tabBarItem:{
-
+    text : {
+        color:COLORS.primary,
+        ...FONTS.body5,
+        marginStart:SIZES.padding - 5,
     }
 })
 

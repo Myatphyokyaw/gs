@@ -3,17 +3,54 @@ import {View, StyleSheet, Pressable, Text, Linking} from "react-native";
 import DetailSectionCard from "./DetailSectionCard";
 import {COLORS, FONTS, SIZES} from "../Themes/theme";
 import NotAvaiableBtnComponent from "./NotAvaiableBtnComponent";
+import RNFetchBlob from "rn-fetch-blob";
 
 const DownloadBtnSecContainer = props => {
 
     const openUrl = async (url) => {
         await Linking.openURL(url)
     }
+
+    const getFileExtention = fileUrl => {
+        return /[.]/.exec(fileUrl) ?
+            /[^.]+$/.exec(fileUrl) : undefined;
+    };
+
+    const handleDownload = (url) => {
+        let date = new Date();
+        let file_ext = getFileExtention(url);
+
+        file_ext = '.' + file_ext[0];
+
+        const {config, fs} = RNFetchBlob;
+        let RootDir = fs.dirs.PictureDir;
+        let options = {
+            fileCache: true,
+            addAndroidDownloads: {
+                path:
+                    RootDir +
+                    '/file_' +
+                    Math.floor(date.getTime() + date.getSeconds() / 2) +
+                    ".apk",
+                description: 'downloading file...',
+                notification: true,
+                useDownloadManager: true,
+            },
+        };
+        config(options)
+            .fetch('GET', url)
+            .then(res => {
+                console.log('res -> ', JSON.stringify(res));
+                alert('File Downloaded Successfully.');
+            });
+    }
+
     return (
         <DetailSectionCard>
             {
                 props.link1 ? (
-                    <Pressable android_ripple={{color:COLORS.lightGray}} onPress={() => openUrl(props.link1)} style={styles.downloadApkBtn}>
+                    <Pressable android_ripple={{color: COLORS.lightGray}} onPress={() => handleDownload(props.link1)}
+                               style={styles.downloadApkBtn}>
                         <Text style={styles.btnText}>Download APK</Text>
                     </Pressable>
                 ) : (
@@ -23,7 +60,8 @@ const DownloadBtnSecContainer = props => {
             <View style={styles.downloadOtherBtnContainer}>
                 {
                     props.link2 ? (
-                        <Pressable android_ripple={{color:COLORS.lightGray}} onPress={() => openUrl(props.link2)} style={styles.downloadModBtn}>
+                        <Pressable android_ripple={{color: COLORS.lightGray}} onPress={() => openUrl(props.link2)}
+                                   style={styles.downloadModBtn}>
                             <Text style={styles.btnText}>Download MOD</Text>
                         </Pressable>
                     ) : (
@@ -32,7 +70,8 @@ const DownloadBtnSecContainer = props => {
                 }
                 {
                     props.link3 ? (
-                        <Pressable android_ripple={{color:COLORS.lightGray}} onPress={() => openUrl(props.link3)} style={styles.downloadOtherBtn}>
+                        <Pressable android_ripple={{color: COLORS.lightGray}} onPress={() => openUrl(props.link3)}
+                                   style={styles.downloadOtherBtn}>
                             <Text style={styles.btnText}>Download Other</Text>
                         </Pressable>
                     ) : (

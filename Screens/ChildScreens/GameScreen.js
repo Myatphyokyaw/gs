@@ -17,6 +17,10 @@ import LottieView from 'lottie-react-native';
 import SkeletonListItemComponent from "../../Components/SkeletonListItemComponent";
 import SkeletonCategoryComponent from "../../Components/SkeletonCategoryComponent";
 import NetWorkErrorModalComponent from "../../Components/NetWorkErrorModalComponent";
+import AdsTwoComponent from "../../Components/AdsTwoComponent";
+import PopularGameComponent from "../../Components/PopularGameComponent";
+import {LogBox} from "react-native";
+import AdsOneComponent from "../../Components/AdsOneComponent";
 
 const GameScreen = props => {
     const {
@@ -40,7 +44,7 @@ const GameScreen = props => {
     useEffect(() => {
         getAllData()
     }, [])
-
+    LogBox.ignoreLogs(["ViewPropTypes will be removed from React Native. Migrate to ViewPropTypes exported from 'deprecated-react-native-prop-types"])
     const selectCategory = (id, selectID) => {
         setSelected(id)
         setAll(false)
@@ -83,7 +87,6 @@ const GameScreen = props => {
                     <StatusBar barStyle={'dark-content'} backgroundColor={COLORS.white}/>
                     <HeaderBarComponent title="Games"/>
                     <View style={{padding: SIZES.padding}}>
-                        <Text style={styles.categoryText}>Categories</Text>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal
                                     style={{marginVertical: SIZES.padding}}>
                             <SkeletonCategoryComponent/>
@@ -106,21 +109,20 @@ const GameScreen = props => {
                 <View style={styles.container}>
                     <StatusBar backgroundColor={COLORS.white} barStyle={"dark-content"}/>
                     <HeaderBarComponent title="Games"/>
-                    <View style={{padding: SIZES.padding}}>
-                        <Text style={styles.categoryText}>Categories</Text>
+                    <View style={{paddingHorizontal: SIZES.padding}}>
                         <ScrollView showsHorizontalScrollIndicator={false} horizontal
                                     style={{marginVertical: SIZES.padding}}>
+
                             <TouchableOpacity onPress={() => selectAll()}
                                               style={[styles.categoryBtn, {backgroundColor: all ? COLORS.primary : COLORS.white}]}>
-                                <Text style={[{color: all ? COLORS.white : COLORS.primary}]}>ALL</Text>
+                                <Text style={[{color: all ? COLORS.white : COLORS.secondary}]}>ALL</Text>
                             </TouchableOpacity>
                             {category.map((el, index) => {
                                 return (
                                     <TouchableOpacity onPress={() => selectCategory(index, el.id)}
                                                       key={index.toString()}
                                                       style={[styles.categoryBtn, {backgroundColor: (selected === index) ? COLORS.primary : COLORS.white}]}>
-                                        <Text
-                                            style={[{color: (selected === index) ? COLORS.white : COLORS.primary}]}>{el.title}</Text>
+                                        <Text style={[{color: (selected === index) ? COLORS.white : COLORS.secondary}]}>{el.title}</Text>
                                     </TouchableOpacity>
                                 )
                             })}
@@ -142,54 +144,106 @@ const GameScreen = props => {
                                     <Text style={{...FONTS.h4, color: COLORS.primary}}>Nothing to show data</Text>
                                 </View>
                             ) : (
-                                <FlatList data={data} keyExtractor={(item, index) => index.toString()}
+                                <FlatList data={data}
+                                          onScroll={()=>props.navigation.setParams({ tabBarVisible: false })}
+                                          keyExtractor={(item, index) => index.toString()}
                                           showsVerticalScrollIndicator={false}
+                                          stickyHeaderIndices={[0]}
+                                          ListHeaderComponent={() => {
+                                              return null
+                                          }}
                                           onEndReachedThreshold={0.5}
                                           onEndReached={loadMore}
                                           ListFooterComponent={more ? (
-                                                  <ActivityIndicator style={{marginBottom: 20, marginTop: 5}}
-                                                                     color={COLORS.primary} size={30}/>) :
-                                              <View style={{marginBottom: 20, marginTop: 5, alignItems: "center"}}>
-                                                  <Text>No More Data.</Text>
+                                                  <View style={styles.listBottomContainer}>
+                                                      <ActivityIndicator color={COLORS.primary} size={30}/>
+                                                  </View>
+                                              ) :
+                                              <View style={styles.listBottomContainer}>
+                                                  <Text style={{...FONTS.body4,color:COLORS.secondary}}>No More Data</Text>
                                               </View>
                                           }
                                           renderItem={({item, index}) => {
-                                              return (
-                                                  <Pressable android_ripple={{color: COLORS.darkgray}}
-                                                             onPress={() => goDetail(item)} activeOpacity={.3}
-                                                             style={styles.gameListContainer}>
-                                                      <View style={styles.listItem}>
-                                                          <Image
-                                                              style={styles.logoImage}
-                                                              source={{uri: item.logo}}/>
-                                                          <View style={styles.rightContainer}>
-                                                              <Text style={styles.gameName}>{((item.name).length > 37) ?
-                                                                  (((item.name).substring(0, 35 - 3)) + '...') :
-                                                                  item.name}</Text>
-                                                              <Text style={styles.gameVersion}>v{item.version} ,
-                                                                  size {((item.size).length > 20) ?
-                                                                      (((item.size).substring(0, 20 - 3)) + '...') :
-                                                                      item.size}</Text>
-                                                              <View style={styles.badgeContainer}>
-                                                                  <View style={styles.categoryBadge}>
+                                              if (index === 4) {
+                                                  return (
+                                                      <PopularGameComponent
+                                                          item={data.filter(el => el.category_id === "10")}/>
+                                                  )
+                                              } else if (index === 7) {
+                                                  return (
+                                                      <>
+                                                          <AdsTwoComponent/>
+                                                          <Pressable android_ripple={{color: COLORS.darkgray}}
+                                                                     onPress={() => goDetail(item)} activeOpacity={.3}
+                                                                     style={styles.gameListContainer}>
+                                                              <View style={styles.listItem}>
+                                                                  <Image
+                                                                      style={styles.logoImage}
+                                                                      source={{uri: item.logo}}/>
+                                                                  <View style={styles.rightContainer}>
                                                                       <Text
-                                                                          style={styles.categoryName}>{item.get_category.title}</Text>
+                                                                          ellipsizeMode="tail"
+                                                                          numberOfLines={1}
+                                                                          style={styles.gameName}>{item.name}</Text>
+                                                                      <Text ellipsizeMode="tail"
+                                                                            numberOfLines={1}
+                                                                            style={styles.gameVersion}>v{item.version} ,
+                                                                          size{item.size}</Text>
+                                                                      <View style={styles.badgeContainer}>
+                                                                          <View style={styles.categoryBadge}>
+                                                                              <Text
+                                                                                  style={styles.categoryName}>{item.get_category.title}</Text>
+                                                                          </View>
+                                                                          <View
+                                                                              style={(item.type.toLowerCase().trim().split('')[1] === 'f') ? styles.offlineBadge : styles.onlineBadge}>
+                                                                              <Text style={styles.categoryName}>{
+                                                                                  (item.type.toLowerCase().trim().split('')[1] === 'f') ? "Offline" : "Online"
+                                                                              }</Text>
+                                                                          </View>
+                                                                      </View>
                                                                   </View>
-                                                                  <View
-                                                                      style={(item.type.toLowerCase().trim().split('')[1] === 'f') ? styles.offlineBadge : styles.onlineBadge}>
-                                                                      <Text style={styles.categoryName}>{
-                                                                          (item.type.toLowerCase().trim().split('')[1] === 'f') ? "Offline" : "Online"
-                                                                      }</Text>
+                                                              </View>
+                                                          </Pressable>
+                                                      </>
+                                                  )
+                                              } else {
+                                                  return (
+                                                      <Pressable android_ripple={{color: COLORS.darkgray}}
+                                                                 onPress={() => goDetail(item)} activeOpacity={.3}
+                                                                 style={styles.gameListContainer}>
+                                                          <View style={styles.listItem}>
+                                                              <Image
+                                                                  style={styles.logoImage}
+                                                                  source={{uri: item.logo}}/>
+                                                              <View style={styles.rightContainer}>
+                                                                  <Text
+                                                                      ellipsizeMode="tail"
+                                                                      numberOfLines={1}
+                                                                      style={styles.gameName}>{item.name}</Text>
+                                                                  <Text ellipsizeMode="tail"
+                                                                        numberOfLines={1}
+                                                                        style={styles.gameVersion}>v{item.version} ,
+                                                                      size{item.size}</Text>
+                                                                  <View style={styles.badgeContainer}>
+                                                                      <View style={styles.categoryBadge}>
+                                                                          <Text style={styles.categoryName}>{item.get_category.title}</Text>
+                                                                      </View>
+                                                                      <View
+                                                                          style={(item.type.toLowerCase().trim().split('')[1] === 'f') ? styles.offlineBadge : styles.onlineBadge}>
+                                                                          <Text style={styles.categoryName}>{
+                                                                              (item.type.toLowerCase().trim().split('')[1] === 'f') ? "Offline" : "Online"
+                                                                          }</Text>
+                                                                      </View>
                                                                   </View>
                                                               </View>
                                                           </View>
-                                                      </View>
-                                                  </Pressable>
-                                              )
+                                                      </Pressable>
+                                                  )
+                                              }
+
                                           }}/>
                             )
                         )
-
                     }
                 </View>
             )}
@@ -203,9 +257,10 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
     },
     categoryText: {
-        ...FONTS.h4,
+        ...FONTS.body3,
         color: COLORS.black,
-        marginTop: SIZES.padding
+        marginStart: SIZES.padding,
+        marginTop: SIZES.padding * 2
     },
     categoryBtn: {
         width: 100,
@@ -221,7 +276,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.20,
         shadowRadius: 1.41,
         elevation: 2,
-        marginVertical: SIZES.padding,
+        marginBottom: SIZES.padding - 6,
+        marginTop: SIZES.padding - 4,
         marginEnd: SIZES.padding,
         marginStart: 0.5
     },
@@ -230,27 +286,32 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white
     },
     gameListContainer: {
-        padding: SIZES.padding,
+        paddingVertical: SIZES.padding * 1.5,
+        paddingHorizontal: SIZES.padding,
+        borderBottomWidth: 0.2,
+        borderColor: COLORS.lightGray2
     },
     listItem: {
         flexDirection: "row"
     },
     logoImage: {
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         borderRadius: SIZES.radius
     },
     rightContainer: {
         paddingHorizontal: SIZES.padding,
-        paddingVertical: SIZES.padding - 5,
         justifyContent: "space-between",
+        width: '100%'
     },
     gameName: {
         ...FONTS.body4,
+        width: '70%',
         color: COLORS.black
     },
     gameVersion: {
         ...FONTS.body5,
+        width: '60%',
         color: COLORS.secondary,
         marginBottom: 3,
     },
@@ -285,6 +346,27 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.success,
         justifyContent: "center",
         alignItems: "center",
+    },
+    customAdsContainer: {
+        height: 100,
+        backgroundColor: COLORS.white,
+        padding: SIZES.padding
+    },
+    customAd: {
+        borderWidth: 0.3,
+        borderRadius: SIZES.radius,
+        width: '100%',
+        justifyContent: "center",
+        alignItems: "center",
+        height: '100%',
+    },
+    listBottomContainer:{
+        alignItems: "center",
+        justifyContent: "center",
+        paddingVertical:SIZES.padding,
+        width:'100%',
+        backgroundColor:COLORS.white,
+        marginBottom:SIZES.padding
     }
 })
 

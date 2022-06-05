@@ -22,7 +22,7 @@ const RequestScreen = props => {
     const [appName, setAppName] = useState("")
     const [description, setDescription] = useState("")
     const [link, setLink] = useState("")
-    const {requestGameData, postRequestGame, setNetWorkModal} = useContext(Context)
+    const {requestGameData, postRequestGame, setNetWorkModal, setNoti} = useContext(Context)
     const [load, setLoad] = useState(false)
     const [successModal, setSuccessModal] = useState(false)
     const [response, setResponse] = useState("")
@@ -30,6 +30,7 @@ const RequestScreen = props => {
     const [appNameValidate, setAppNameValidate] = useState(true)
     const [descriptionValidate, setDescriptionValidate] = useState(true)
     const [linkValidate, setLinkValidate] = useState(true)
+    let today = new Date();
 
     useEffect(() => {
         createChannels()
@@ -46,6 +47,7 @@ const RequestScreen = props => {
             largeIcon: "ic_notification",
             smallIcon: "ic_notification",
         })
+        setNoti("Successfully Request", responseData, `${today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()}`)
     }
 
     const createChannels = () => {
@@ -66,7 +68,7 @@ const RequestScreen = props => {
             })
             let config = {
                 method: 'post',
-                url: 'http://192.168.1.28/project/public/api/v1',
+                url: 'http://game.mgbogyi.com/api/v1',
                 headers: {
                     'X-hardik': '123456',
                     'Content-Type': 'application/json'
@@ -158,7 +160,9 @@ const RequestScreen = props => {
                     <ScrollView showsVerticalScrollIndicator={false} style={{width: '100%'}}>
                         <View style={{width: '100%', alignItems: "center"}}>
                             <View style={styles.inputContainer}>
-                                <Text style={[styles.inputPlaceHolder,{color:nameValidate ? COLORS.secondary : COLORS.danger}]}>Your Name *</Text>
+                                <Text
+                                    style={[styles.inputPlaceHolder, {color: nameValidate ? COLORS.secondary : COLORS.danger}]}>Your
+                                    Name *</Text>
                                 <TextInput value={name} onChangeText={(text) => setName(text)}
                                            selectionColor={COLORS.primary}
                                            placeholder=""
@@ -168,7 +172,9 @@ const RequestScreen = props => {
                                            }]}/>
                             </View>
                             <View style={styles.inputContainer}>
-                                <Text style={[styles.inputPlaceHolder,{color:appNameValidate ? COLORS.secondary : COLORS.danger}]}>Game Name *</Text>
+                                <Text
+                                    style={[styles.inputPlaceHolder, {color: appNameValidate ? COLORS.secondary : COLORS.danger}]}>Game
+                                    Name *</Text>
                                 <TextInput value={appName} onChangeText={(text) => setAppName(text)}
                                            selectionColor={COLORS.primary}
                                            placeholder=""
@@ -178,7 +184,9 @@ const RequestScreen = props => {
                                            }]}/>
                             </View>
                             <View style={styles.inputContainer}>
-                                <Text style={[styles.inputPlaceHolder,{color:linkValidate ? COLORS.secondary : COLORS.danger}]}>PlayStore Link *</Text>
+                                <Text
+                                    style={[styles.inputPlaceHolder, {color: linkValidate ? COLORS.secondary : COLORS.danger}]}>PlayStore
+                                    Link *</Text>
                                 <TextInput value={link} onChangeText={(text) => setLink(text)}
                                            selectionColor={COLORS.primary}
                                            style={[styles.nameInput, {
@@ -187,7 +195,9 @@ const RequestScreen = props => {
                                            }]}/>
                             </View>
                             <View style={styles.inputContainer}>
-                                <Text style={[styles.inputPlaceHolder,{color:descriptionValidate ? COLORS.secondary : COLORS.danger}]}>Game Review and online Offline *</Text>
+                                <Text
+                                    style={[styles.inputPlaceHolder, {color: descriptionValidate ? COLORS.secondary : COLORS.danger}]}>Game
+                                    Review and online Offline *</Text>
                                 <TextInput value={description} onChangeText={(text) => setDescription(text)} multiline
                                            numberOfLines={7}
                                            selectionColor={COLORS.primary}
@@ -226,15 +236,15 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: COLORS.white,
     },
-    requestRootContainer:{
-      padding:SIZES.padding
+    requestRootContainer: {
+        padding: SIZES.padding
     },
     requestContainer: {
         alignItems: "center",
-        width:'100%',
+        width: '100%',
         paddingHorizontal: SIZES.padding,
-        paddingTop:SIZES.padding,
-        paddingBottom:SIZES.padding * 2,
+        paddingTop: SIZES.padding,
+        paddingBottom: SIZES.padding * 2,
         backgroundColor: COLORS.white,
         borderRadius: SIZES.radius,
     },
@@ -302,7 +312,7 @@ const styles = StyleSheet.create({
         shadowRadius: 1.41,
 
         elevation: 2,
-        marginBottom:3
+        marginBottom: 3
     },
     btnText: {
         color: COLORS.white,
