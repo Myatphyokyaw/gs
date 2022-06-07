@@ -5,7 +5,7 @@ import {COLORS, FONTS, SIZES} from "../Themes/theme";
 const DetailDescriptionComponent = props => {
     return (
         <View style={styles.container}>
-            <Text style={styles.header}>ဂိမ်းအကြောင်း</Text>
+            <Text style={styles.header}>About Game</Text>
             <Text style={styles.description}>{props.des}</Text>
         </View>
     )

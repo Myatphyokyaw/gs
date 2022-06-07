@@ -11,7 +11,7 @@ const DetailFirstSection = props => {
             </View>
             <View style={styles.rightContainer}>
                 <View style={{height: 20}}>
-                    <Text style={styles.name}>{item.name}</Text>
+                    <Text numberOfLines={1} style={styles.name}>{item.name}</Text>
                 </View>
                 <View style={{flexDirection: "row", alignItems: "center", marginBottom: 4}}>
                     <Text style={styles.version}>size{item.size},</Text>
@@ -45,10 +45,11 @@ const styles = StyleSheet.create({
     },
     name: {
         ...FONTS.h5,
-        color: COLORS.black
+        color: COLORS.black,
+        width:'90%'
     },
     version: {
-        ...FONTS.body4,
+        ...FONTS.body5,
         color: COLORS.black
     },
     rightContainer: {

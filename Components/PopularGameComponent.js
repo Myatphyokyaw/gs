@@ -16,7 +16,7 @@ const PopularGameComponent = props => {
                     <Text style={styles.headerText}>Popular Games</Text>
                 </View>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {props.item.map((el, index) => {
+                    {props.item.reverse().map((el, index) => {
                         return (
                             <Pressable onPress={() => goDetail(el)} key={index.toString()}
                                        android_ripple={{color: COLORS.lightGray3}} style={styles.bodyContainer}>

@@ -1,6 +1,6 @@
-import React from "react";
-import {View, StyleSheet, StatusBar, ScrollView} from "react-native";
-import {COLORS, SIZES} from "../../Themes/theme";
+import React, {useContext, useState} from "react";
+import {View, StyleSheet, StatusBar, ScrollView, Modal, Text} from "react-native";
+import {COLORS, FONTS, SIZES} from "../../Themes/theme";
 import DetailHeaderBarComponent from "../../Components/DetailHeaderBarComponent";
 import DetailFirstSection from "../../Components/DetailFirstSection";
 import DetailSecSection from "../../Components/DetailSecSection";
@@ -9,11 +9,23 @@ import DetailVideoSectionComponent from "../../Components/DetailVideoSectionComp
 import DetailPhotosComponent from "../../Components/DetailPhotosComponent";
 import DownloadBtnSecContainer from "../../Components/DownloadBtnSecContainer";
 import ShowImageModalComponent from "../../Components/ShowImageModalComponent";
+import LottieView from "lottie-react-native";
+import {Context} from "../../Navigations/Provider";
 
 const GamesDetailScreen = props => {
     const item = props.route.params
+    const {downloading,setDownloading} = useContext(Context)
     return (
-
+        <>
+            <Modal transparent={true} visible={downloading}>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalSubContainer}>
+                        <LottieView style={styles.lottie} autoPlay={true} loop={true}
+                                    source={require("../../Graphics/Lotties/download.json")}/>
+                        <Text style={{color:COLORS.primary,...FONTS.body3}}>Downloading ...</Text>
+                    </View>
+                </View>
+            </Modal>
             <View style={styles.container}>
                 <ShowImageModalComponent/>
                 <DetailHeaderBarComponent/>
@@ -35,6 +47,7 @@ const GamesDetailScreen = props => {
                     </View>
                 </ScrollView>
             </View>
+        </>
 
     )
 }
@@ -48,6 +61,23 @@ const styles = StyleSheet.create({
         paddingVertical: SIZES.padding * 2,
         paddingHorizontal: SIZES.padding
     },
+    modalContainer: {
+        backgroundColor: 'rgba(0,0,0,0.49)',
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    modalSubContainer: {
+        backgroundColor: COLORS.white,
+        height: SIZES.height / 3,
+        width: SIZES.width / 1.2,
+        borderRadius: SIZES.radius,
+        justifyContent:"center",
+        alignItems:"center"
+    },
+    lottie: {
+        width: SIZES.width / 4
+    }
 
 })
 

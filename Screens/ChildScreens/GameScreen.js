@@ -10,6 +10,7 @@ import {
     ActivityIndicator,
     FlatList, Pressable
 } from "react-native";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import {COLORS, FONTS, SIZES} from "../../Themes/theme";
 import HeaderBarComponent from "../../Components/HeaderBarComponent";
 import {Context} from "../../Navigations/Provider";
@@ -20,7 +21,6 @@ import NetWorkErrorModalComponent from "../../Components/NetWorkErrorModalCompon
 import AdsTwoComponent from "../../Components/AdsTwoComponent";
 import PopularGameComponent from "../../Components/PopularGameComponent";
 import {LogBox} from "react-native";
-import AdsOneComponent from "../../Components/AdsOneComponent";
 
 const GameScreen = props => {
     const {
@@ -41,6 +41,7 @@ const GameScreen = props => {
     const [all, setAll] = useState(true)
     const [categoryRole, setCategoryRole] = useState(false)
     const [categoryId, setCategoryId] = useState(null)
+    const [imageLoad, setImageLoad] = useState(true)
     useEffect(() => {
         getAllData()
     }, [])
@@ -122,7 +123,8 @@ const GameScreen = props => {
                                     <TouchableOpacity onPress={() => selectCategory(index, el.id)}
                                                       key={index.toString()}
                                                       style={[styles.categoryBtn, {backgroundColor: (selected === index) ? COLORS.primary : COLORS.white}]}>
-                                        <Text style={[{color: (selected === index) ? COLORS.white : COLORS.secondary}]}>{el.title}</Text>
+                                        <Text
+                                            style={[{color: (selected === index) ? COLORS.white : COLORS.secondary}]}>{el.title}</Text>
                                     </TouchableOpacity>
                                 )
                             })}
@@ -145,7 +147,7 @@ const GameScreen = props => {
                                 </View>
                             ) : (
                                 <FlatList data={data}
-                                          onScroll={()=>props.navigation.setParams({ tabBarVisible: false })}
+                                          onScroll={() => props.navigation.setParams({tabBarVisible: false})}
                                           keyExtractor={(item, index) => index.toString()}
                                           showsVerticalScrollIndicator={false}
                                           stickyHeaderIndices={[0]}
@@ -160,14 +162,14 @@ const GameScreen = props => {
                                                   </View>
                                               ) :
                                               <View style={styles.listBottomContainer}>
-                                                  <Text style={{...FONTS.body4,color:COLORS.secondary}}>No More Data</Text>
+                                                  <Text style={{...FONTS.body4, color: COLORS.secondary}}>No More Data</Text>
                                               </View>
                                           }
                                           renderItem={({item, index}) => {
                                               if (index === 4) {
                                                   return (
                                                       <PopularGameComponent
-                                                          item={data.filter(el => el.category_id === "10")}/>
+                                                          item={data.filter(el => el.category_id === "8")}/>
                                                   )
                                               } else if (index === 7) {
                                                   return (
@@ -212,8 +214,14 @@ const GameScreen = props => {
                                                                  onPress={() => goDetail(item)} activeOpacity={.3}
                                                                  style={styles.gameListContainer}>
                                                           <View style={styles.listItem}>
+                                                              {imageLoad && (
+                                                                  <SkeletonPlaceholder>
+                                                                      <View style={styles.logoImage}></View>
+                                                                  </SkeletonPlaceholder>
+                                                              )}
                                                               <Image
-                                                                  style={styles.logoImage}
+                                                                  onLoadEnd={() => setImageLoad(false)}
+                                                                  style={[styles.logoImage, {display: imageLoad ? 'none' : "flex"}]}
                                                                   source={{uri: item.logo}}/>
                                                               <View style={styles.rightContainer}>
                                                                   <Text
@@ -226,7 +234,8 @@ const GameScreen = props => {
                                                                       size{item.size}</Text>
                                                                   <View style={styles.badgeContainer}>
                                                                       <View style={styles.categoryBadge}>
-                                                                          <Text style={styles.categoryName}>{item.get_category.title}</Text>
+                                                                          <Text
+                                                                              style={styles.categoryName}>{item.get_category.title}</Text>
                                                                       </View>
                                                                       <View
                                                                           style={(item.type.toLowerCase().trim().split('')[1] === 'f') ? styles.offlineBadge : styles.onlineBadge}>
@@ -295,8 +304,8 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     logoImage: {
-        width: 60,
-        height: 60,
+        width: 70,
+        height: 70,
         borderRadius: SIZES.radius
     },
     rightContainer: {
@@ -360,13 +369,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         height: '100%',
     },
-    listBottomContainer:{
+    listBottomContainer: {
         alignItems: "center",
         justifyContent: "center",
-        paddingVertical:SIZES.padding,
-        width:'100%',
-        backgroundColor:COLORS.white,
-        marginBottom:SIZES.padding
+        paddingVertical: SIZES.padding,
+        width: '100%',
+        backgroundColor: COLORS.white,
+        marginBottom: SIZES.padding
     }
 })
 

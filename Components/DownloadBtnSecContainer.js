@@ -1,9 +1,10 @@
-import React from "react";
-import {View, StyleSheet, Pressable, Text, Linking} from "react-native";
+import React, {useContext, useState} from "react";
+import {View, StyleSheet, Pressable, Text, Linking, Modal, ToastAndroid} from "react-native";
 import DetailSectionCard from "./DetailSectionCard";
 import {COLORS, FONTS, SIZES} from "../Themes/theme";
 import NotAvaiableBtnComponent from "./NotAvaiableBtnComponent";
 import RNFetchBlob from "rn-fetch-blob";
+import {Context} from "../Navigations/Provider";
 
 const DownloadBtnSecContainer = props => {
 
@@ -11,12 +12,15 @@ const DownloadBtnSecContainer = props => {
         await Linking.openURL(url)
     }
 
+    const {downloading, setDownloading} = useContext(Context)
+
     const getFileExtention = fileUrl => {
         return /[.]/.exec(fileUrl) ?
             /[^.]+$/.exec(fileUrl) : undefined;
     };
 
     const handleDownload = (url) => {
+        setDownloading(true)
         let date = new Date();
         let file_ext = getFileExtention(url);
 
@@ -41,7 +45,8 @@ const DownloadBtnSecContainer = props => {
             .fetch('GET', url)
             .then(res => {
                 console.log('res -> ', JSON.stringify(res));
-                alert('File Downloaded Successfully.');
+                setDownloading(false)
+                ToastAndroid.showWithGravityAndOffset("Download Successfully",10,30,80,400)
             });
     }
 
@@ -60,7 +65,8 @@ const DownloadBtnSecContainer = props => {
             <View style={styles.downloadOtherBtnContainer}>
                 {
                     props.link2 ? (
-                        <Pressable android_ripple={{color: COLORS.lightGray}} onPress={() => openUrl(props.link2)}
+                        <Pressable android_ripple={{color: COLORS.lightGray}}
+                                   onPress={() => handleDownload(props.link2)}
                                    style={styles.downloadModBtn}>
                             <Text style={styles.btnText}>Download MOD</Text>
                         </Pressable>
@@ -70,7 +76,8 @@ const DownloadBtnSecContainer = props => {
                 }
                 {
                     props.link3 ? (
-                        <Pressable android_ripple={{color: COLORS.lightGray}} onPress={() => openUrl(props.link3)}
+                        <Pressable android_ripple={{color: COLORS.lightGray}}
+                                   onPress={() => handleDownload(props.link3)}
                                    style={styles.downloadOtherBtn}>
                             <Text style={styles.btnText}>Download Other</Text>
                         </Pressable>
@@ -115,7 +122,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginTop: SIZES.padding,
         justifyContent: "space-between"
-    }
+    },
+    modalContainer: {}
 })
 
 export default DownloadBtnSecContainer

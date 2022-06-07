@@ -1,5 +1,5 @@
 import React from "react";
-import {Text, View, StyleSheet, Image, StatusBar, TouchableOpacity, Pressable} from "react-native";
+import {Text, View, StyleSheet, Image, StatusBar, TouchableOpacity, Pressable, ToastAndroid} from "react-native";
 import {COLORS, FONTS, SIZES} from "../../Themes/theme";
 import AboutHeaderComponent from "../../Components/AboutHeaderComponent";
 import VersionCheck from 'react-native-version-check';
@@ -39,12 +39,12 @@ const AboutScreen = props => {
                         </View>
                     </View>
                     <View style={styles.row}>
-                        <Pressable android_ripple={{color: COLORS.lightGray}}
+                        <Pressable onPress={()=>ToastAndroid.show("This app is not avaiable on playstore.",2000)} android_ripple={{color: COLORS.lightGray}}
                                    style={[styles.btn, {backgroundColor: COLORS.primary}]}>
                             <Ionicons name="arrow-up-circle-sharp" size={15} color={COLORS.white}/>
                             <Text style={styles.btnText}>Check Update</Text>
                         </Pressable>
-                        <Pressable android_ripple={{color: COLORS.lightGray}}
+                        <Pressable onPress={()=>ToastAndroid.show("This app is not avaiable on playstore.",2000)} android_ripple={{color: COLORS.lightGray}}
                                    style={[styles.btn, {backgroundColor: COLORS.gray}]}>
                             <Ionicons name="star" size={15} color={COLORS.white}/>
                             <Text style={styles.btnText}>Rating Our App</Text>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         borderRadius: SIZES.radius * 2,
         justifyContent: "center",
         alignItems: "center",
-        marginVertical:SIZES.padding,
+        marginVertical: SIZES.padding,
         backgroundColor: COLORS.white,
         shadowColor: "#000",
         shadowOffset: {
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: SIZES.padding,
         paddingTop: SIZES.padding,
         paddingBottom: SIZES.padding,
-        justifyContent:"center",
-        alignItems:"center",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: COLORS.white,
         borderRadius: SIZES.radius,
         borderWidth: 1,
@@ -116,10 +116,10 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: "row",
-        width:'100%',
+        width: '100%',
         justifyContent: "space-between",
         paddingVertical: SIZES.padding,
-        paddingHorizontal:SIZES.padding - 5,
+        paddingHorizontal: SIZES.padding - 5,
     },
     text: {
         ...FONTS.body4,

@@ -56,7 +56,8 @@ export const Provider = ({children}) => {
     const [adsTwoData, setAdsTwoData] = useState([])
     const [notificationData, setNotificationData] = useState([])
     const [notiLoad, setNotiLoad] = useState(true)
-    const [emptyNoti,setEmptyNoti] = useState(false)
+    const [emptyNoti, setEmptyNoti] = useState(false)
+    const [downloading, setDownloading] = useState(false)
     const arr = []
     return (
         <Context.Provider value={{
@@ -91,6 +92,8 @@ export const Provider = ({children}) => {
             notificationData,
             emptyNoti,
             setEmptyNoti,
+            downloading,
+            setDownloading,
             getAllData: async () => {
                 setLoading(true)
                 setMore(true)
@@ -261,7 +264,7 @@ export const Provider = ({children}) => {
                                     }
                                     await setNotificationData(result)
                                     await setNotiLoad(false)
-                                }else{
+                                } else {
                                     setNotiLoad(false)
                                     await setEmptyNoti(true)
                                 }
